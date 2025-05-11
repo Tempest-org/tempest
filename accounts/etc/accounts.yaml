@@ -8,5 +8,5 @@ JwtAuth:
   AccessSecret: your-access-secret-key-change-in-production
   RefreshSecret: your-refresh-secret-key-change-in-production
 Database:
-  URI: postgres://postgres:postgres@localhost:5432/accounts
+  URI: postgres://postgres:postgres@localhost:5432/accounts?sslmode=disable
   DBName: accounts
