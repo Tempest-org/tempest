@@ -59,7 +59,7 @@ func NewTokensLogic() (TokensLogic, error) {
 
 	issuer := secrets.JWTIssuer
 	if issuer == "" {
-		issuer = "orka"
+		issuer = "tempest"
 	}
 	uc.issuer = issuer
 
