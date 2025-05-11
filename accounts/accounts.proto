@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package accounts;
+option go_package="./accounts";
+
+message Request {
+  string ping = 1;
+}
+
+message Response {
+  string pong = 1;
+}
+
+message RegisterRequest {
+  string username = 1;
+  string email = 2;
+  optional string phone = 3; // optional
+  string password = 4;
+}
+
+message TokenResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+enum Identifier {
+  EMAIL = 0;
+  USERNAME = 1;
+  PHONE = 2;
+}
+
+message LoginRequest {
+	Identifier identifier = 1;
+	string value = 2;
+	string password = 3;
+}
+
+message RefreshRequest {
+  string refresh_token = 1;
+}
+message RefreshResponse {
+  string access_token = 1;
+}
+
+message ValidateRequest {
+  string access_token = 1;
+}
+message ValidateResponse {
+  bool valid = 1;
+  optional string sub = 2;
+  optional int64 exp = 3;
+  optional string issuer = 4;
+  map<string, string> claims = 5;
+}
+
+message ChangePasswordRequest {
+  Identifier  identifier = 1;
+  string value = 2;
+  string old_password = 3;
+  string new_password = 4;
+}
+
+message ChangePasswordResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+service Accounts {
+  rpc Ping(Request) returns(Response);
+  rpc Register(RegisterRequest) returns(TokenResponse);
+  rpc Login(LoginRequest) returns(TokenResponse);
+  rpc Refresh(RefreshRequest) returns(RefreshResponse);
+  rpc Validate(ValidateRequest) returns(ValidateResponse);
+  rpc ChangePassword(ChangePasswordRequest) returns(ChangePasswordResponse);
+}
