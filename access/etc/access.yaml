@@ -5,9 +5,9 @@ Etcd:
   - 127.0.0.1:2379
   Key: access.rpc
 Database:
-  URI: postgres://postgres:postgres@localhost:5432/tempest?sslmode=disable
+  URI: postgres://postgres:postgres@localhost:5432/access?sslmode=disable
   Host: localhost
   Port: 5432
   User: postgres
   Password: postgres
-  Database: tempest
+  Database: access
