@@ -19,14 +19,25 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Access_Ping_FullMethodName = "/access.Access/Ping"
+	Access_Check_FullMethodName             = "/access.Access/Check"
+	Access_Grant_FullMethodName             = "/access.Access/Grant"
+	Access_Revoke_FullMethodName            = "/access.Access/Revoke"
+	Access_GetSubjectAccess_FullMethodName  = "/access.Access/GetSubjectAccess"
+	Access_GetObjectSubjects_FullMethodName = "/access.Access/GetObjectSubjects"
+	Access_HealthCheck_FullMethodName       = "/access.Access/HealthCheck"
 )
 
 // AccessClient is the client API for Access service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AccessClient interface {
-	Ping(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
+	Check(ctx context.Context, in *CheckAccessRequest, opts ...grpc.CallOption) (*CheckAccessResponse, error)
+	Grant(ctx context.Context, in *GrantAccessRequest, opts ...grpc.CallOption) (*Empty, error)
+	Revoke(ctx context.Context, in *RevokeAccessRequest, opts ...grpc.CallOption) (*Empty, error)
+	GetSubjectAccess(ctx context.Context, in *GetSubjectAccessRequest, opts ...grpc.CallOption) (*GetSubjectAccessResponse, error)
+	GetObjectSubjects(ctx context.Context, in *GetObjectSubjectsRequest, opts ...grpc.CallOption) (*GetObjectSubjectsResponse, error)
+	// Health check endpoint
+	HealthCheck(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error)
 }
 
 type accessClient struct {
@@ -37,10 +48,60 @@ func NewAccessClient(cc grpc.ClientConnInterface) AccessClient {
 	return &accessClient{cc}
 }
 
-func (c *accessClient) Ping(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
+func (c *accessClient) Check(ctx context.Context, in *CheckAccessRequest, opts ...grpc.CallOption) (*CheckAccessResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Response)
-	err := c.cc.Invoke(ctx, Access_Ping_FullMethodName, in, out, cOpts...)
+	out := new(CheckAccessResponse)
+	err := c.cc.Invoke(ctx, Access_Check_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accessClient) Grant(ctx context.Context, in *GrantAccessRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, Access_Grant_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accessClient) Revoke(ctx context.Context, in *RevokeAccessRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, Access_Revoke_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accessClient) GetSubjectAccess(ctx context.Context, in *GetSubjectAccessRequest, opts ...grpc.CallOption) (*GetSubjectAccessResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSubjectAccessResponse)
+	err := c.cc.Invoke(ctx, Access_GetSubjectAccess_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accessClient) GetObjectSubjects(ctx context.Context, in *GetObjectSubjectsRequest, opts ...grpc.CallOption) (*GetObjectSubjectsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetObjectSubjectsResponse)
+	err := c.cc.Invoke(ctx, Access_GetObjectSubjects_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accessClient) HealthCheck(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HealthCheckResponse)
+	err := c.cc.Invoke(ctx, Access_HealthCheck_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +112,13 @@ func (c *accessClient) Ping(ctx context.Context, in *Request, opts ...grpc.CallO
 // All implementations must embed UnimplementedAccessServer
 // for forward compatibility.
 type AccessServer interface {
-	Ping(context.Context, *Request) (*Response, error)
+	Check(context.Context, *CheckAccessRequest) (*CheckAccessResponse, error)
+	Grant(context.Context, *GrantAccessRequest) (*Empty, error)
+	Revoke(context.Context, *RevokeAccessRequest) (*Empty, error)
+	GetSubjectAccess(context.Context, *GetSubjectAccessRequest) (*GetSubjectAccessResponse, error)
+	GetObjectSubjects(context.Context, *GetObjectSubjectsRequest) (*GetObjectSubjectsResponse, error)
+	// Health check endpoint
+	HealthCheck(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error)
 	mustEmbedUnimplementedAccessServer()
 }
 
@@ -62,8 +129,23 @@ type AccessServer interface {
 // pointer dereference when methods are called.
 type UnimplementedAccessServer struct{}
 
-func (UnimplementedAccessServer) Ping(context.Context, *Request) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+func (UnimplementedAccessServer) Check(context.Context, *CheckAccessRequest) (*CheckAccessResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
+}
+func (UnimplementedAccessServer) Grant(context.Context, *GrantAccessRequest) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Grant not implemented")
+}
+func (UnimplementedAccessServer) Revoke(context.Context, *RevokeAccessRequest) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Revoke not implemented")
+}
+func (UnimplementedAccessServer) GetSubjectAccess(context.Context, *GetSubjectAccessRequest) (*GetSubjectAccessResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSubjectAccess not implemented")
+}
+func (UnimplementedAccessServer) GetObjectSubjects(context.Context, *GetObjectSubjectsRequest) (*GetObjectSubjectsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetObjectSubjects not implemented")
+}
+func (UnimplementedAccessServer) HealthCheck(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck not implemented")
 }
 func (UnimplementedAccessServer) mustEmbedUnimplementedAccessServer() {}
 func (UnimplementedAccessServer) testEmbeddedByValue()                {}
@@ -86,20 +168,110 @@ func RegisterAccessServer(s grpc.ServiceRegistrar, srv AccessServer) {
 	s.RegisterService(&Access_ServiceDesc, srv)
 }
 
-func _Access_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Request)
+func _Access_Check_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckAccessRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccessServer).Ping(ctx, in)
+		return srv.(AccessServer).Check(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Access_Ping_FullMethodName,
+		FullMethod: Access_Check_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccessServer).Ping(ctx, req.(*Request))
+		return srv.(AccessServer).Check(ctx, req.(*CheckAccessRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Access_Grant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GrantAccessRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccessServer).Grant(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Access_Grant_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccessServer).Grant(ctx, req.(*GrantAccessRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Access_Revoke_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevokeAccessRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccessServer).Revoke(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Access_Revoke_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccessServer).Revoke(ctx, req.(*RevokeAccessRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Access_GetSubjectAccess_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSubjectAccessRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccessServer).GetSubjectAccess(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Access_GetSubjectAccess_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccessServer).GetSubjectAccess(ctx, req.(*GetSubjectAccessRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Access_GetObjectSubjects_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetObjectSubjectsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccessServer).GetObjectSubjects(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Access_GetObjectSubjects_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccessServer).GetObjectSubjects(ctx, req.(*GetObjectSubjectsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Access_HealthCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HealthCheckRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccessServer).HealthCheck(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Access_HealthCheck_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccessServer).HealthCheck(ctx, req.(*HealthCheckRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -112,8 +284,28 @@ var Access_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AccessServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Ping",
-			Handler:    _Access_Ping_Handler,
+			MethodName: "Check",
+			Handler:    _Access_Check_Handler,
+		},
+		{
+			MethodName: "Grant",
+			Handler:    _Access_Grant_Handler,
+		},
+		{
+			MethodName: "Revoke",
+			Handler:    _Access_Revoke_Handler,
+		},
+		{
+			MethodName: "GetSubjectAccess",
+			Handler:    _Access_GetSubjectAccess_Handler,
+		},
+		{
+			MethodName: "GetObjectSubjects",
+			Handler:    _Access_GetObjectSubjects_Handler,
+		},
+		{
+			MethodName: "HealthCheck",
+			Handler:    _Access_HealthCheck_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

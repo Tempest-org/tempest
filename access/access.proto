@@ -3,14 +3,82 @@ syntax = "proto3";
 package access;
 option go_package="./access";
 
-message Request {
-  string ping = 1;
+message Empty {}
+
+message HealthCheckRequest {
+  string service = 1;
 }
 
-message Response {
-  string pong = 1;
+message HealthCheckResponse {
+  enum ServingStatus {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+  }
+  ServingStatus status = 1;
+}
+
+// Request to check if a subject has permission to perform an action on an object in an organization
+message CheckAccessRequest {
+  string organization_id = 1;
+  string subject_id = 2;
+  string object = 3;
+  string action = 4;
+}
+
+message CheckAccessResponse {
+  bool allowed = 1;
+}
+
+// Request to grant permission to a subject to perform an action on an object in an organization
+message GrantAccessRequest {
+  string organization_id = 1;
+  string subject_id = 2;
+  string object = 3;
+  string action = 4;
+}
+
+// Request to revoke permission from a subject to perform an action on an object in an organization
+message RevokeAccessRequest {
+  string organization_id = 1;
+  string subject_id = 2;
+  string object = 3;
+  string action = 4;
+}
+
+// Request to get all access permissions for a subject in an organization
+message GetSubjectAccessRequest {
+  string organization_id = 1;
+  string subject_id = 2;
+}
+
+message AccessPermission {
+  string object = 1;
+  string action = 2;
+}
+
+message GetSubjectAccessResponse {
+  repeated AccessPermission permissions = 1;
+}
+
+// Request to get all subjects that have access to perform an action on an object in an organization
+message GetObjectSubjectsRequest {
+  string organization_id = 1;
+  string object = 2;
+  string action = 3;
+}
+
+message GetObjectSubjectsResponse {
+  repeated string subject_ids = 1;
 }
 
 service Access {
-  rpc Ping(Request) returns(Response);
+  rpc Check(CheckAccessRequest) returns(CheckAccessResponse);
+  rpc Grant(GrantAccessRequest) returns(Empty);
+  rpc Revoke(RevokeAccessRequest) returns(Empty);
+  rpc GetSubjectAccess(GetSubjectAccessRequest) returns(GetSubjectAccessResponse);
+  rpc GetObjectSubjects(GetObjectSubjectsRequest) returns(GetObjectSubjectsResponse);
+  
+  // Health check endpoint
+  rpc HealthCheck(HealthCheckRequest) returns(HealthCheckResponse);
 }
