@@ -1,0 +1,41 @@
+services:
+  etcd:
+    image: bitnami/etcd:latest
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+    ports:
+      - "2379:2379"
+      - "2380:2380"
+    networks:
+      - microservices_network
+
+  nats:
+    image: nats:latest
+    ports:
+      - "4222:4222"  # Client connections
+      - "8222:8222"  # HTTP monitoring
+      - "6222:6222"  # Routing port for clustering
+    command: "--jetstream --http_port 8222"
+    volumes:
+      - ./data/nats:/var/lib/nats
+    networks:
+      - microservices_network
+
+  pg:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_MULTIPLE_DATABASES=accounts
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/pg:/var/lib/postgresql/data
+      - ./scripts/init-multiple-dbs.sh:/docker-entrypoint-initdb.d/init-multiple-dbs.sh
+    networks:
+      - microservices_network
+
+networks:
+  microservices_network:
+    driver: bridge
