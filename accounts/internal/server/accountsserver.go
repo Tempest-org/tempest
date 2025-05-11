@@ -7,9 +7,9 @@ package server
 import (
 	"context"
 
-	"accounts/accounts"
-	"accounts/internal/logic"
-	"accounts/internal/svc"
+	"github.com/tempest-org/tempest/accounts/accounts"
+	"github.com/tempest-org/tempest/accounts/internal/logic"
+	"github.com/tempest-org/tempest/accounts/internal/svc"
 )
 
 type AccountsServer struct {

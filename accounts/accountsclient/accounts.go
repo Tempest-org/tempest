@@ -7,7 +7,7 @@ package accountsclient
 import (
 	"context"
 
-	"accounts/accounts"
+	"github.com/tempest-org/tempest/accounts/accounts"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

@@ -1,6 +1,6 @@
 package svc
 
-import "accounts/internal/config"
+import "github.com/tempest-org/tempest/accounts/internal/config"
 
 type ServiceContext struct {
 	Config config.Config

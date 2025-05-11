@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"accounts/accounts"
-	"accounts/internal/config"
-	"accounts/internal/server"
-	"accounts/internal/svc"
+	"github.com/tempest-org/tempest/accounts/accounts"
+	"github.com/tempest-org/tempest/accounts/internal/config"
+	"github.com/tempest-org/tempest/accounts/internal/server"
+	"github.com/tempest-org/tempest/accounts/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"

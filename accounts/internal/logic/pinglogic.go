@@ -3,8 +3,8 @@ package logic
 import (
 	"context"
 
-	"accounts/accounts"
-	"accounts/internal/svc"
+	"github.com/tempest-org/tempest/accounts/accounts"
+	"github.com/tempest-org/tempest/accounts/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

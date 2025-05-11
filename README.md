@@ -1,11 +1,23 @@
-# Accounts Microservice
+# Tempest Platform
 
-This microservice provides user account management functionality.
+Tempest is a modern microservices platform built with Go, designed for scalability and maintainability.
 
-## Features
+## Project Structure
 
-- User registration with token generation
-- More features to be added...
+```
+tempest/
+├── pkg/                # Shared packages used across services
+│   ├── auth/           # Authentication utilities
+│   ├── config/         # Configuration utilities 
+│   ├── datasource/     # Database connection utilities
+│   └── ...
+├── services/           # Individual microservices
+│   ├── accounts/       # User account management service
+│   └── ...
+├── scripts/            # Utility scripts
+├── docker-compose.yml  # Docker Compose configuration
+└── README.md           # This file
+```
 
 ## Getting Started
 
@@ -14,53 +26,37 @@ This microservice provides user account management functionality.
 - Go 1.24.2 or higher
 - Docker and Docker Compose
 
-### Running the Service with Dependencies
+### Running the Platform
 
-1. Start the required dependencies (ETCD and NATS) using Docker Compose:
+1. Start the required dependencies (PostgreSQL, ETCD, and NATS) using Docker Compose:
 
 ```bash
 docker-compose up -d
 ```
 
-2. Run the accounts service:
+2. Run a specific service:
 
 ```bash
-cd accounts
-go run accounts.go
+cd services/accounts
+go run .
 ```
 
-### Testing
+## Services
 
-Use the provided test script to test the Register endpoint:
+### Accounts Service
 
-```bash
-./test-register.sh
-```
+The accounts service provides user management functionality:
 
-## API Reference
+- User registration with token generation
+- Authentication and authorization
+- User profile management
 
-### Register
+## Contributing
 
-Registers a new user and returns access and refresh tokens.
+1. Create a new branch for your feature or bugfix
+2. Make your changes
+3. Submit a pull request
 
-**Request:**
-```proto
-message RegisterRequest {
-  string username = 1;
-  string email = 2;
-  string phone = 3; // optional
-  string password = 4;
-}
-```
+## License
 
-**Response:**
-```proto
-message TokenResponse {
-  string access_token = 1;
-  string refresh_token = 2;
-}
-```
-
-## Configuration
-
-The service configuration is stored in `accounts/etc/accounts.yaml`. Make sure to update the JWT secrets for production use.
+[MIT License](LICENSE)
