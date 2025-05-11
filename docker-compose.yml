@@ -18,7 +18,7 @@ services:
       - "6222:6222"  # Routing port for clustering
     command: "--jetstream --http_port 8222"
     volumes:
-      - ./data/nats:/var/lib/nats
+      - ./.data/nats:/var/lib/nats
     networks:
       - microservices_network
 
@@ -31,7 +31,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data/pg:/var/lib/postgresql/data
+      - ./.data/pg:/var/lib/postgresql/data
       - ./scripts/init-multiple-dbs.sh:/docker-entrypoint-initdb.d/init-multiple-dbs.sh
     networks:
       - microservices_network
