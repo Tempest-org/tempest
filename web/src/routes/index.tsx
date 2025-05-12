@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import logo from "../logo.svg";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
 	component: App,
@@ -33,6 +34,9 @@ function App() {
 				>
 					Learn TanStack
 				</a>
+				<div className="flex flex-col gap-2 bg-card h-full w-full">
+					<Button className="max-w-lg">hi</Button>
+				</div>
 			</header>
 		</div>
 	);
