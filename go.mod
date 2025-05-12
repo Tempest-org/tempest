@@ -3,6 +3,7 @@ module github.com/tempest-org/tempest
 go 1.24.2
 
 require (
+	ariga.io/atlas-go-sdk v0.7.0
 	github.com/casbin/casbin-pg-adapter v1.4.0
 	github.com/casbin/casbin/v2 v2.105.0
 	github.com/google/uuid v1.6.0
@@ -16,7 +17,6 @@ require (
 
 require (
 	ariga.io/atlas v0.32.0 // indirect
-	ariga.io/atlas-go-sdk v0.7.0 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect

@@ -1,0 +1,54 @@
+# Organizations Service Justfile
+# https://just.systems/man/en/
+
+# List available commands
+default:
+    @just --list
+
+# Build the organizations service
+build:
+    go build -o server
+
+# Run the organizations service
+run:
+	air
+
+# Run without building (development mode)
+run-prod: build
+	./server
+
+# Run tests for all packages
+test:
+    go test ./...
+
+# Run tests with verbose output
+test-v:
+    go test -v ./...
+
+# Generate code from proto files using goctl
+proto:
+    goctl rpc protoc --zrpc_out . --go-grpc_out . --go_out=. organizations.proto
+
+# Run with delve debugger
+debug:
+    dlv debug organizations.go
+
+# Debug with specific arguments
+debug-args *args:
+    dlv debug organizations.go -- {{args}}
+
+# Format Go code
+fmt:
+    go fmt ./...
+
+# Lint Go code
+lint:
+    go vet ./...
+
+# Clean build artifacts
+clean:
+    rm -f organizations
+
+# Show current Go version
+go-version:
+    go version

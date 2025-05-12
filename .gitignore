@@ -1,4 +1,2 @@
-accounts/tmp
-accounts/server
-access/tmp
-access/access_policies.csv
+*/tmp
+*/server

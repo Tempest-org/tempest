@@ -1,0 +1,176 @@
+syntax = "proto3";
+
+package organizations;
+option go_package="./organizations";
+
+// Organization entity
+message Organization {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string website_url = 4;
+  string primary_color = 5;
+  string secondary_color = 6;
+  string logo_url = 7;
+  string background_url = 8;
+  string created_by = 9;
+  string created_at = 10;
+  string updated_at = 11;
+}
+
+// Member entity
+message OrganizationMember {
+  int64 organization_id = 1;
+  int64 user_id = 2;
+  string role = 3;
+  string created_at = 4;
+  string updated_at = 5;
+}
+
+// Invitation entity
+message OrganizationInvitation {
+  int64 organization_id = 1;
+  string email = 2;
+  string invited_by = 3;
+  string invited_as_role = 4;
+  bool accepted = 5;
+  string responded_at = 6;
+  string created_at = 7;
+  string updated_at = 8;
+}
+
+// Request and Response messages
+message CreateOrganizationRequest {
+  string name = 1;
+  string description = 2;
+  string website_url = 3;
+  string primary_color = 4;
+  string secondary_color = 5;
+  string logo_url = 6;
+  string background_url = 7;
+}
+
+message CreateOrganizationResponse {
+  Organization organization = 1;
+}
+
+message GetOrganizationRequest {
+  int64 id = 1;
+}
+
+message GetOrganizationResponse {
+  Organization organization = 1;
+}
+
+message UpdateOrganizationRequest {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string website_url = 4;
+  string primary_color = 5;
+  string secondary_color = 6;
+  string logo_url = 7;
+  string background_url = 8;
+}
+
+message UpdateOrganizationResponse {
+  Organization organization = 1;
+}
+
+message DeleteOrganizationRequest {
+  int64 id = 1;
+}
+
+message DeleteOrganizationResponse {
+  bool success = 1;
+}
+
+message ListOrganizationsRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message ListOrganizationsResponse {
+  repeated Organization organizations = 1;
+  int32 total = 2;
+}
+
+message InviteMemberRequest {
+  int64 organization_id = 1;
+  string email = 2;
+  string role = 3;
+}
+
+message InviteMemberResponse {
+  OrganizationInvitation invitation = 1;
+}
+
+message AcceptInvitationRequest {
+  int64 organization_id = 1;
+  string email = 2;
+}
+
+message AcceptInvitationResponse {
+  bool success = 1;
+}
+
+message RemoveMemberRequest {
+  int64 organization_id = 1;
+  int64 user_id = 2;
+}
+
+message RemoveMemberResponse {
+  bool success = 1;
+}
+
+message GetOrganizationMembersRequest {
+  int64 organization_id = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+}
+
+message GetOrganizationMembersResponse {
+  repeated OrganizationMember members = 1;
+  int32 total = 2;
+}
+
+message GetInvitationsRequest {
+  int64 organization_id = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+}
+
+message GetInvitationsResponse {
+  repeated OrganizationInvitation invitations = 1;
+  int32 total = 2;
+}
+
+message GetUserOrganizationsRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message GetUserOrganizationsResponse {
+  repeated Organization organizations = 1;
+  int32 total = 2;
+}
+
+// Service definition
+service Organizations {
+  // Organization operations
+  rpc CreateOrganization(CreateOrganizationRequest) returns (CreateOrganizationResponse);
+  rpc GetOrganization(GetOrganizationRequest) returns (GetOrganizationResponse);
+  rpc UpdateOrganization(UpdateOrganizationRequest) returns (UpdateOrganizationResponse);
+  rpc DeleteOrganization(DeleteOrganizationRequest) returns (DeleteOrganizationResponse);
+  rpc ListOrganizations(ListOrganizationsRequest) returns (ListOrganizationsResponse);
+  
+  // Member operations
+  rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse);
+  rpc AcceptInvitation(AcceptInvitationRequest) returns (AcceptInvitationResponse);
+  rpc RemoveMember(RemoveMemberRequest) returns (RemoveMemberResponse);
+  rpc GetOrganizationMembers(GetOrganizationMembersRequest) returns (GetOrganizationMembersResponse);
+  rpc GetInvitations(GetInvitationsRequest) returns (GetInvitationsResponse);
+  
+  // User-specific operations
+  rpc GetUserOrganizations(GetUserOrganizationsRequest) returns (GetUserOrganizationsResponse);
+}
